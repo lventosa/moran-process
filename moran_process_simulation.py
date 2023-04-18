@@ -83,14 +83,14 @@ class MoranProcess():
         """
         probabilities = []
 
-        if np.any(self.f_a) and np.any(self.f_b): # simulation_type == 'selection'
+        if np.any(self.f_a) and np.any(self.f_b): # simulation_type = 'selection'
             for k in range(1, n): 
                 p_down = self.f_b[k]*(n-k)/(self.f_a[k]*k + self.f_b[k]*(n-k)) * k/n
                 p_up = self.f_a[k]*k/(self.f_a[k]*k + self.f_b[k]*(n-k)) * (n-k)/n
                 p_steady = 1 - (p_down + p_up)
                 probabilities.append([p_down, p_steady, p_up])
 
-        else: # simulation_type == 'neutral_drift'
+        else: # simulation_type = 'neutral_drift'
             for k in range(1, n): 
                 p_down = (n-k)/n * k/n
                 p_up = k/n * (n-k)/n
@@ -126,8 +126,8 @@ class MoranProcess():
     
 
 if __name__ == '__main__':
-
-    # valor maxim: 100; 100 individul total; a l'inici 20 de tipus A
+    
+    # valor maxim: 100; 100 individus total; a l'inici 20 de tipus A
     moran_process = MoranProcess(max=100, seed=123, simulation_type='neutral_drift')
     neutral_drift_array = moran_process.simulate_moran_process(n=100, initial_state=20)
     print(f'Moran process with neutral drift simulation:\n {neutral_drift_array}\n')
@@ -137,7 +137,6 @@ if __name__ == '__main__':
     selection_array = moran_process.simulate_moran_process(n=100, initial_state=20)
     print(f'Moran process with selection simulation:\n {selection_array}\n')
     # plt.plot(moran_process.simulate_moran_process(n=100, initial_state=20))
-
 
     # TODO: tuning de max, n i initial_state
     # TODO: fer grafica
