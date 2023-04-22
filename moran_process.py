@@ -106,10 +106,10 @@ class MoranProcess():
         This function generates a realization of the Moran process. The 
         generation process continues until absorption occurs.
 
-        :return: a realization of the Moran process.
+        :return: a realization of the Moran process (group A counts).
         :rtype: np.array
         """
-        s = [self.initial_state]
+        a_counts = [self.initial_state]
         new_state = self.initial_state
         increments = [-1, 0, 1]
         
@@ -117,9 +117,9 @@ class MoranProcess():
             if new_state in [0, self.population_size]: 
                 break
             new_state += self.rng.choice(
-                increments, p=self.probs[new_state - 1]
+                increments, p=self.probs[new_state-1]
             )
-            s.append(new_state)
+            a_counts.append(new_state)
 
-        return np.array(s)
+        return np.array(a_counts)
     
