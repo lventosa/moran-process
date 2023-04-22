@@ -40,32 +40,13 @@ if __name__ == '__main__':
         population_size=POPULATION_SIZE, 
         seed=SEED, 
         initial_state=INITIAL_STATE,
-        simulation_type='neutral_drift'
     )
     neutral_drift_array_a = moran_process.simulate_moran_process()
     neutral_drift_array_b = get_other_group_population_counts(
         a_array=neutral_drift_array_a, 
         population_size=POPULATION_SIZE
     )
-    print(f'Moran process with neutral drift simulation (group A):\n {neutral_drift_array_a}\n')
+
     plt.plot(np.column_stack((neutral_drift_array_a, neutral_drift_array_b)))
     plt.legend(loc='upper left', labels=('A', 'B'))
     plt.show()
-
-    moran_process = MoranProcess(
-        population_size=POPULATION_SIZE,
-        seed=SEED, 
-        initial_state=INITIAL_STATE,
-        simulation_type='selection'
-    )
-    selection_array_a = moran_process.simulate_moran_process()
-    selection_array_b = get_other_group_population_counts(
-        a_array=selection_array_a, 
-        population_size=POPULATION_SIZE
-    )
-    print(f'Moran process with selection simulation (group A):\n {selection_array_a}\n')
-    plt.plot(np.column_stack((neutral_drift_array_a, neutral_drift_array_b)))
-    plt.legend(loc='upper left', labels=('A', 'B'))
-    plt.show()
-
-    # TODO: separar fitness aleatòria i fitness constant i determinista

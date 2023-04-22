@@ -9,9 +9,9 @@ import numpy as np
 
 class MoranProcess():
     """ 
-    This class allows us to build a Moran process, which is a discrete-time 
-    stochastic process typically used to model evolutionary dynamics in 
-    populations. 
+    This class allows us to build a neutral-drift Moran process, which is a 
+    discrete-time stochastic process typically used to model evolutionary 
+    dynamics in populations. 
     
     At each step this process will increase by one, decrease by one, or remain 
     at the same value between 0 and the number of states, i.e. individuals (n). 
@@ -25,25 +25,15 @@ class MoranProcess():
 
     :param seed: seed for the random number generator.
     :type seed: int
-
-    :param simulation_type: type of simulation to be performed. Either 
-        simulation_type = 'selection' or simulation_type = 'neutral_drift'.
-    :type simulation_type: str
     """
 
     def __init__(
-        self, population_size: int, seed: int, 
-        initial_state: float, simulation_type: str
+        self, population_size: int, initial_state: float, seed: int, 
     ):
         super().__init__()
         self.population_size = population_size
         self.initial_state = initial_state
 
-        if simulation_type == 'selection':
-            self.f_a, self.f_b = self.group_fitness()
-        else: 
-            self.f_a = None
-            self.f_b = None
         self.probs = self.transition_probabilities()
 
         self.rng = np.random 
@@ -59,20 +49,7 @@ class MoranProcess():
         :param seed: seed for the random number generator.
         :type seed: int
         """
-        rng.seed(seed)
-
-    def group_fitness(self) -> Tuple[np.ndarray, np.ndarray]: 
-        """
-        This function generates random fitness values for each of the population
-        groups.
-
-        :return: fitness values for each group.
-        :rtype: Tuple[np.ndarray, np.ndarray]
-        """
-        f_a: np.ndarray = np.random.randint(low=1, high=10, size=self.population_size)
-        f_b: np.ndarray = np.random.randint(low=1, high=10, size=self.population_size)
-        return f_a, f_b
-        
+        rng.seed(seed)        
 
     def transition_probabilities(self) -> List[float]:
         """
@@ -85,19 +62,11 @@ class MoranProcess():
         probabilities = []
         n = self.population_size # to simplify notation in the formulas below
 
-        if np.any(self.f_a) and np.any(self.f_b): # simulation_type = 'selection'
-            for k in range(1, n): 
-                p_down = self.f_b[k]*(-k)/(self.f_a[k]*k + self.f_b[k]*(n-k)) * k/n
-                p_up = self.f_a[k]*k/(self.f_a[k]*k + self.f_b[k]*(n-k)) * (n-k)/n
-                p_steady = 1 - (p_down + p_up)
-                probabilities.append([p_down, p_steady, p_up])
-
-        else: # simulation_type = 'neutral_drift'
-            for k in range(1, n): 
-                p_down = (n-k)/n * k/n
-                p_up = k/n * (n-k)/n
-                p_steady = 1 - (p_down + p_up)
-                probabilities.append([p_down, p_steady, p_up])            
+        for i in range(1, n): 
+            p_down = (n-i)/n * i/n
+            p_up = i/n * (n-i)/n
+            p_steady = 1 - (p_down + p_up)
+            probabilities.append([p_down, p_steady, p_up])            
 
         return probabilities
 
