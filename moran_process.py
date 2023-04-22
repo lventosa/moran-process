@@ -37,19 +37,16 @@ class MoranProcess():
         self.probs = self.transition_probabilities()
 
         self.rng = np.random 
-        self.set_seed(self.rng, seed)
+        self.set_seed(seed)
 
-    def set_seed(self, rng: np.random, seed: int) -> None:
+    def set_seed(self, seed: int) -> None:
         """
         This function sets the seed for the random number generator.
-
-        :param rng: random number generator.
-        :type rng: np.random
 
         :param seed: seed for the random number generator.
         :type seed: int
         """
-        rng.seed(seed)        
+        self.rng.seed(seed)        
 
     def transition_probabilities(self) -> List[float]:
         """
