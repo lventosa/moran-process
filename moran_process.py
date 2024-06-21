@@ -30,7 +30,6 @@ class MoranProcess():
     def __init__(
         self, population_size: int, initial_state: float, seed: int, 
     ):
-        super().__init__()
         self.population_size = population_size
         self.initial_state = initial_state
 
